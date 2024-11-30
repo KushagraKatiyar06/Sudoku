@@ -1,5 +1,5 @@
 import math,random
-import pygame
+import pygame, sys
 
 #kushagra katiyar
 
@@ -168,3 +168,65 @@ def generate_sudoku(size, removed):
     sudoku.remove_cells()
     board = sudoku.get_board()
     return board
+
+class Cell:
+
+    def __init__(self, value, row, col, screen):
+        self.value = value
+        self.row = row
+        self.col = col
+        self.screen = screen
+        self.sketched_value = 0
+        self.selected = False
+
+    def set_cell_value(self, value):
+        self.value = value
+
+    def set_sketched_value(self, value):
+        self.sketched_value = value
+
+    def set_selected(self, selected):
+        self.selected = selected
+
+    def draw(self):
+
+        cell_size = 100
+        x,y = self.col * cell_size, self.row * cell_size
+        rect = (x, y, cell_size, cell_size)
+        pygame.draw.rect(self.screen,(255,255,255), rect)
+
+        if self.selected:
+            pygame.draw.rect(self.screen, (255,0,0), rect, 3)
+        else:
+            pygame.draw.rect(self.screen, (0,0,0), rect,1)
+
+        if self.value != 0:
+            font = pygame.font.Font(None, cell_size // 2)
+            text = font.render(str(self.value), True, (0,0,0))
+            text_rect = text.get_rect(center = (x + cell_size // 2, y + cell_size // 2))
+            self.screen.blit(text, text_rect)
+
+    class Board:
+        def __init__(self, width, height, screen, difficulty):
+            self.width = width
+            self.height = height
+            self.screen = pygame.display.set_mode((900, 900))
+            self.difficulty = difficulty
+
+        def draw(self):
+            for i in range (1,10):
+                #horizontal lines
+                pygame.draw.line(self.screen, (0,0,0), (0,i * 100), (900, i * 100))
+            for i in range (1,10):
+                #vertical lines
+                pygame.draw.line(self.screen, (0,0,0), (i * 100,0), (i * 100, 900))
+            for i in range (3,9,3):
+                #bolded lines
+                pygame.draw.line(self.screen, (0,0,0), (i * 100,0), (i * 100,900), 5)
+                pygame.draw.line(self.screen, (0,0,0), (0,i * 100), (900,i * 100), 5)
+
+
+
+
+
+
